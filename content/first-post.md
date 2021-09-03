@@ -12,7 +12,7 @@ Blog outline:
 * [1.3 Square root digital expansion](#section3)
 
 
-## 1.1 Sum square difference<a name="section1"></a>
+##1.1 Sum square difference<a name="section1"></a>
 This is problem 6 from the [Euler Project](https://projecteuler.net/archives). Solved by 496,347 up to now.
 
 Here is the question: Find the difference between the sum of the squares of the first 100 natural numbers and square of their sum.
@@ -33,7 +33,7 @@ def square_diff():
   
 ```
 
-## 1.2 Digit factorials<a name="section2"></a>
+##1.2 Digit factorials<a name="section2"></a>
 This is problem 34 from the [Euler Project](https://projecteuler.net/archives). Solved by 95,112 up to now.
 
 Here is the question: Find the sum of all numbers which are equal to the sum of the factorial of their digits.
@@ -76,7 +76,7 @@ def dig_factorial():
 
 ```
 
-## 1.3 Square root digital expansion<a name="section3"></a>
+##1.3 Square root digital expansion<a name="section3"></a>
 This is problem 80 from the [Euler Project](https://projecteuler.net/archives). Solved by 19,755 up to now.
 
 Here is the Question: For the first one hundred natural numbers, find the total of the digital sums of the first one hundred decimal digits for all the irrational square roots.
