@@ -1,2 +1,2 @@
 # GaojiaXu.github.io
-This is the link of the [webpage](https://gaojiaxu.github.io).
+Fro more details and homework blog, see [Gaojia webpage](https://gaojiaxu.github.io).
