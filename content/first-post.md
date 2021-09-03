@@ -27,12 +27,12 @@ This question is quite straightforward.
 
 The function looks like this:
 
-```
+```python
 def square_diff():
     """Return difference of the sum of squares of first 100 number and square of their sum."""
     lst = range(1, 100+1)    
-    print(sum(lst) ** 2 - sum(s ** 2 for s in lst))
-    
+    return(sum(lst) ** 2 - sum(s ** 2 for s in lst))
+  
 ```
 
 ## 1.2 Digit factorials
