@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>BIOSTAT-823-2021Fall Homework Blog</title><link href="/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2021-09-03T00:00:00-04:00</updated><subtitle></subtitle><entry><title>Blog on Homework 1</title><link href="/blog-on-homework-1.html" rel="alternate"></link><published>2021-09-03T00:00:00-04:00</published><updated>2021-09-03T00:00:00-04:00</updated><author><name>Gaojia Xu</name></author><id>tag:None,2021-09-03:/blog-on-homework-1.html</id><summary type="html">&lt;p&gt;In this blog, my solutions of 3 small questions from &lt;a href="https://projecteuler.net/archives"&gt;Euler Project&lt;/a&gt; will be explained. They are problem 6, 34 and 80.&lt;/p&gt;
+&lt;p&gt;Blog outline:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="#11-sum-square-difference"&gt;1.1 Sum square difference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#12-digit-factorials"&gt;1.2 Digit factorials&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#13-square-root-digital-expansion"&gt;1.3 Square root digital expansion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;1.1 Sum square difference&lt;/h2&gt;
+&lt;p&gt;This is problem 6 from the …&lt;/p&gt;</summary><content type="html">&lt;p&gt;In this blog, my solutions of 3 small questions from &lt;a href="https://projecteuler.net/archives"&gt;Euler Project&lt;/a&gt; will be explained. They are problem 6, 34 and 80.&lt;/p&gt;
+&lt;p&gt;Blog outline:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="#11-sum-square-difference"&gt;1.1 Sum square difference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#12-digit-factorials"&gt;1.2 Digit factorials&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#13-square-root-digital-expansion"&gt;1.3 Square root digital expansion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;1.1 Sum square difference&lt;/h2&gt;
+&lt;p&gt;This is problem 6 from the &lt;a href="https://projecteuler.net/archives"&gt;Euler Project&lt;/a&gt;. Solved by 496,347 up to now.&lt;/p&gt;
+&lt;p&gt;Here is the question: Find the difference between the sum of the squares of the first 100 natural numbers and square of their sum.&lt;/p&gt;
+&lt;p&gt;This question is quite straightforward. &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The square of the sum of first 100 numbers can be computed directly. &lt;/li&gt;
+&lt;li&gt;We can loop through the 100 numbers to calculate the square of each number then sum them up. &lt;/li&gt;
+&lt;li&gt;The final step is finding difference of these two components by subtraction.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The function looks like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;def square_diff():&lt;/span&gt;
+&lt;span class="err"&gt;    &amp;quot;&amp;quot;&amp;quot;Return difference of the sum of squares of first 100 number and square of their sum.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="err"&gt;    lst = range(1, 100+1)    &lt;/span&gt;
+&lt;span class="err"&gt;    print(sum(lst) ** 2 - sum(s ** 2 for s in lst))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;1.2 Digit factorials&lt;/h2&gt;
+&lt;p&gt;This is problem 34 from the &lt;a href="https://projecteuler.net/archives"&gt;Euler Project&lt;/a&gt;. Solved by 95,112 up to now.&lt;/p&gt;
+&lt;p&gt;Here is the question: Find the sum of all numbers which are equal to the sum of the factorial of their digits.&lt;/p&gt;
+&lt;p&gt;The intuitive train of thought is to first check the sum of the factorial of the digits, then if this sum equals to the number, means it satisfies the criteria, we should add the number to the final sum.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;As we know the there are only 9 kinds of factorial result of a digit, so I first create the factorial dictionary in order to simplify the further repeated factorial calculations.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;To choose the upper bound of the loop range, we know if the number has more than 7 digits, then no matter how many digits it has, say n, then multiply n by 9! will less than the number itself. Thus we can choose the upper bound as 10000000 to save energy. Also from the problem, we follow the instructions to exclude 1 and 2 so the lower bound is 3.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Then the main idea to calculate sum of the factorial of the digits is converting the number to string for the inner loop of digits' factorial. Make digits in the number to a list and find corresponding factorial from the factorial list for further summation.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Finally, after checking the equalization of sum of digits factorial and the number, we can add satisfied numbers to the total sum.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The function looks like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;math&lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;dig_factorial&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Return sum of all numbers which are equal to the sum of the factorial of their digits.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# create factorial dictionary for simplicity&lt;/span&gt;
+    &lt;span class="n"&gt;tot_sum&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;    
+    &lt;span class="n"&gt;fact_list&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{}&lt;/span&gt;
+    &lt;span class="n"&gt;fact_list&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;fact_list&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;factorial&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;10000000&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;num_lst&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="n"&gt;number_sum&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;num_lst&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;number_sum&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;fact_list&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;number_sum&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;tot_sum&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;      
+
+    &lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tot_sum&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;1.3 Square root digital expansion&lt;/h2&gt;
+&lt;p&gt;This is problem 80 from the &lt;a href="https://projecteuler.net/archives"&gt;Euler Project&lt;/a&gt;. Solved by 19,755 up to now.&lt;/p&gt;
+&lt;p&gt;Here is the Question: For the first one hundred natural numbers, find the total of the digital sums of the first one hundred decimal digits for all the irrational square roots.&lt;/p&gt;
+&lt;p&gt;A thing I noticed is that if we find square root of a number directly, it will only return several digits which is not enough for this question. Thus, we can leverage the package &lt;code&gt;decimal&lt;/code&gt; to extract decimal with specified precision.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;The logic of this question is firstly, check if the number has irrational square root, if the residual of the square root divided by 1 is not 0, this means the number is irrational.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Then we process the number to find summation of its digit. But before that we should replace the dot in square root of the number to nothing in order to do summation easier. Checking with the question in Euler, it says for square root of number 2, digital sum of its first one hundred decimal digits is 475, which is the sum of digits start from the very beginning (including the integer part), so we stick with this rule.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;For each irrational number, we design a inner loop of digits to calculate sum. The idea is similar to the second question, which is making digits first into string and then convert back. Finally, we add all digital sums of  first 100 digits of irrational square roots in first 100 number.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The function looks like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;decimal&lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;root_expan&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Return total of the digital sums of the first 100 decimal digits for all the irrational square roots&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+    &lt;span class="n"&gt;getcontext&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prec&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;102&lt;/span&gt;   
+    &lt;span class="n"&gt;tot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;101&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+        &lt;span class="c1"&gt;# indicates the square root of the number is irrational&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; 
+            &lt;span class="n"&gt;dec_string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Decimal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;replace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[:&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;             
+            &lt;span class="n"&gt;sum_dec&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+            &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;dec_string&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                &lt;span class="n"&gt;sum_dec&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="n"&gt;tot&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;sum_dec&lt;/span&gt;
+
+    &lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tot&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="misc"></category></entry></feed>
