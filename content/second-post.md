@@ -43,7 +43,7 @@ def expand(expression, expand_decimal):
 
 Second, write a function to check if a number is prime.
 
-The idea of this function follows Sieve of Eratosthenes. After considering some special case, such that number 2 is a prime, we can first sieve all even numbers because they are not prime, can be divided by 2. Then we can sieve multiples of odd numbers in a specific range, setting the upper bound as the square root of the number is economic way, and add 1 to be safer, and we skip the even numbers because we already sieve for 2. 
+The idea of this function : After considering some special case, such that number 2 is a prime, we can first sieve all even numbers because they are not prime, can be divided by 2. Then we can sieve multiples of odd numbers in a specific range, setting the upper bound as the square root of the number is economic way, and add 1 to be safer, and we skip the even numbers because we already sieve for 2. 
 
 The function looks like this:
 
@@ -160,7 +160,7 @@ if __name__ == '__main__':
 
 ```python
 
-! python3 -m unittest test_helpers.py
+! python3 -m unittest test_functions.py
 
 ```
 
