@@ -4,7 +4,7 @@ author: Gaojia Xu
 
 Number theory and a Google recruitment puzzle
 
-In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and a main function.
+In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and use them to create a main function.
 
 Blog outline:
 
@@ -47,7 +47,7 @@ The idea of this function follows Sieve of Eratosthenes. After considering some 
 
 The function looks like this:
 
-```
+```python
 def check_prime(n):
     """Check if the number is a prime"""
     if n == 2:
@@ -85,6 +85,8 @@ def sliding_window(num, start, length):
 
 
 ##2.4 Unit test for 3 functions<a name="section4"></a>
+
+We use unit test to check if 3 functions work.
 
 ```python
 
@@ -251,7 +253,7 @@ The test returns OK, which means the main function works well.
    
 ##2.7 Solve the problem<a name="section7"></a>
 
-Find 10-digit prime in decimal expansion of $17*\pi$
+Find 10-digit prime in decimal expansion of 17pi.
 
 ```python
 
