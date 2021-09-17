@@ -33,7 +33,7 @@
 
 &lt;h2&gt;2.2 Check if a number is prime&lt;a name="section2"&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Second, write a function to check if a number is prime.&lt;/p&gt;
-&lt;p&gt;The idea of this function follows Sieve of Eratosthenes. After considering some special case, such that number 2 is a prime, we can first sieve all even numbers because they are not prime, can be divided by 2. Then we can sieve multiples of odd numbers in a specific range, setting the upper bound as the square root of the number is economic way, and add 1 to be safer, and we skip the even numbers because we already sieve for 2. &lt;/p&gt;
+&lt;p&gt;The idea of this function : After considering some special case, such that number 2 is a prime, we can first sieve all even numbers because they are not prime, can be divided by 2. Then we can sieve multiples of odd numbers in a specific range, setting the upper bound as the square root of the number is economic way, and add 1 to be safer, and we skip the even numbers because we already sieve for 2. &lt;/p&gt;
 &lt;p&gt;The function looks like this:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;check_prime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Check if the number is a prime&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
@@ -128,7 +128,7 @@
     &lt;span class="n"&gt;unittest&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;!&lt;/span&gt; &lt;span class="n"&gt;python3&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;unittest&lt;/span&gt; &lt;span class="n"&gt;test_helpers&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;!&lt;/span&gt; &lt;span class="n"&gt;python3&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;unittest&lt;/span&gt; &lt;span class="n"&gt;test_functions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The test returns OK, which means three functions work well.&lt;/p&gt;
