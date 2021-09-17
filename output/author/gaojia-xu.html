@@ -19,7 +19,239 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/blog-on-homework-1.html">Blog on Homework 1</a></h1>
+                    <h1 class="entry-title"><a href="/blog-on-homework-2.html">Blog on Homework 2</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2021-09-17T00:00:00-04:00">
+                Published: Fri 17 September 2021
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/gaojia-xu.html">Gaojia Xu</a>
+        </address>
+<p>In <a href="/category/misc.html">misc</a>.</p>
+
+</footer><!-- /.post-info --><p>Number theory and a Google recruitment puzzle</p>
+<p>In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and use them to create a main function.</p>
+<p>Blog outline:</p>
+<ul>
+<li><a href="#section1">2.1 Generate expansion of expression.</a></li>
+<li><a href="#section2">2.2 Check if a number is prime</a></li>
+<li><a href="#section3">2.3 Generate sliding windows</a></li>
+<li><a href="#section4">2.4 Unit test for former 3 functions</a></li>
+<li><a href="#section5">2.5 Main function: find first n-digit prime in the decimal expansion of a number</a></li>
+<li><a href="#section6">2.6 Unit test of main function</a></li>
+<li><a href="#section7">2.7 Solve the problem</a></li>
+</ul>
+<h2>2.1 Generate expansion of expression<a name="section1"></a></h2>
+<p>First we write a function to generate an arbitrary large expansion of a mathematical expression like π.</p>
+<p>We can use directly from <code>sympy</code> package to expand an mathematical expression.</p>
+<p>The function looks like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the expression with decimal length specified&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">expand_decimal</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The specified digits length of expansion should be a float or an integer&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">N</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>2.2 Check if a number is prime<a name="section2"></a></h2>
+<p>Second, write a function to check if a number is prime.</p>
+<p>The idea of this function : After considering some special case, such that number 2 is a prime, we can first sieve all even numbers because they are not prime, can be divided by 2. Then we can sieve multiples of odd numbers in a specific range, setting the upper bound as the square root of the number is economic way, and add 1 to be safer, and we skip the even numbers because we already sieve for 2. </p>
+<p>The function looks like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">check_prime</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if the number is a prime&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div>
+
+<h2>2.3 Generate sliding windows<a name="section3"></a></h2>
+<p>Third, write a function to generate sliding windows of a specified width from a long iterable.</p>
+<p>For each input number, create the sliding window from start position and with specified length, if there is dot included, we should split by dot and join all numbers from the int and decimal portion.</p>
+<p>The function looks like this:</p>
+<div class="highlight"><pre><span></span><code><span class="n">def</span> <span class="n">sliding_window</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span><span class="o">:</span>
+    <span class="s">&quot;&quot;&quot;Return the string of the number starts from start position with specified length&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">type</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">!=</span> <span class="kt">int</span> <span class="n">or</span> <span class="n">type</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="o">!=</span> <span class="kt">int</span><span class="o">:</span>
+        <span class="n">raise</span> <span class="n">TypeError</span><span class="p">(</span><span class="s">&quot;n_len and n_dec need to be integers&quot;</span><span class="p">)</span>
+
+    <span class="n">string</span> <span class="o">=</span> <span class="err">&#39;&#39;</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">num</span><span class="p">).</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">))[</span><span class="nl">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">length</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">string</span>
+</code></pre></div>
+
+<h2>2.4 Unit test for 3 functions<a name="section4"></a></h2>
+<p>We use unit test to check if 3 functions work.</p>
+<div class="highlight"><pre><span></span><code><span class="o">%%</span><span class="n">file</span> <span class="n">functions</span><span class="o">.</span><span class="n">py</span>
+
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the expression with decimal length specified&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">expand_decimal</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The specified digits length of expansion should be a float or an integer&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">N</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">check_prime</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if the number is a prime&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="k">def</span> <span class="nf">sliding_window</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the string of the number starts from start position with specified length&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;n_len and n_dec need to be integers&quot;</span><span class="p">)</span>
+
+    <span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">))[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">length</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">string</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="o">%%</span><span class="n">file</span> <span class="n">test_functions</span><span class="o">.</span><span class="n">py</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">functions</span> <span class="kn">import</span> <span class="n">expand</span><span class="p">,</span> <span class="n">check_prime</span><span class="p">,</span> <span class="n">sliding_window</span>
+
+
+<span class="k">class</span> <span class="nc">TestHelpers</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_expand</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">expand</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="nb">format</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">&#39;.3f&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">expand</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span> <span class="nb">format</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;.29f&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">expand</span><span class="p">(</span><span class="mf">7.6</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="mi">8</span><span class="p">)),</span> <span class="nb">format</span><span class="p">(</span><span class="mf">7.6</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;.6f&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_expand_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">expand</span><span class="p">,</span> <span class="s2">&quot;5&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_prime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="mi">7427466391</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sliding_window</span><span class="p">(</span><span class="mf">3.1415926589</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;592&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sliding_window</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="nb">format</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;.20f&#39;</span><span class="p">)[</span><span class="mi">7</span><span class="p">:</span><span class="mi">7</span><span class="o">+</span><span class="mi">8</span><span class="p">])</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="err">!</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">unittest</span> <span class="n">test_functions</span><span class="o">.</span><span class="n">py</span>
+</code></pre></div>
+
+<p>The test returns OK, which means three functions work well.</p>
+<h2>2.5 Main function: find first n-digit prime in the decimal expansion of a number<a name="section5"></a></h2>
+<ol>
+<li>
+<p>For each expression, we first expand it to specified decimals, if it is not specified, we use default 1000.</p>
+</li>
+<li>
+<p>We create sliding windows for the certain number of digit in the expanded expression. It should be a loop because we check from the beginning of the expanded expression and add 1 to the start position each time (shift the window to the right for 1 position each time).</p>
+</li>
+<li>
+<p>Check if the number has length of the prime length we want, because if the number has 0 at the beginning, the length is shortened by 1, thus we set this as the one of the checking condition. And another checking condition is if the nubmer in sliding window is prime or not, and we only need the first prime.</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">prime_in_num</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">prime_dig</span><span class="p">,</span> <span class="n">expand_decimal</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the first prime of specified length in an expression&quot;&quot;&quot;</span>
+
+    <span class="n">expanded</span> <span class="o">=</span> <span class="n">expand</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">expand_decimal</span><span class="p">):</span>
+        <span class="n">num_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliding_window</span><span class="p">(</span><span class="n">expanded</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">prime_dig</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num_int</span><span class="p">))</span> <span class="o">==</span> <span class="n">prime_dig</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="n">num_int</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">num_int</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">expand_decimal</span> <span class="o">-</span> <span class="n">prime_dig</span><span class="p">:</span>
+            <span class="k">return</span><span class="p">(</span><span class="s2">&quot;There is no prime with specified length within the decimal expansion of the expression&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>2.6 Unit test of main function<a name="section6"></a></h2>
+<p>What we know: The first 5 digits in the decimal expansion of π are 14159. The first 4-digit prime in the decimal expansion of π are 4159. The first 10-digit prime in the expansion e is 7427466391. We can use unit test to check if our main funciton returns the right answer.</p>
+<div class="highlight"><pre><span></span><code><span class="o">%%</span><span class="n">file</span> <span class="n">main_function</span><span class="o">.</span><span class="n">py</span>
+
+<span class="kn">from</span> <span class="nn">functions</span> <span class="kn">import</span> <span class="n">expand</span><span class="p">,</span> <span class="n">check_prime</span><span class="p">,</span> <span class="n">sliding_window</span>
+
+
+<span class="k">def</span> <span class="nf">prime_in_num</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">prime_dig</span><span class="p">,</span> <span class="n">expand_decimal</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the first prime of specified length in an expression&quot;&quot;&quot;</span>
+
+    <span class="n">expanded</span> <span class="o">=</span> <span class="n">expand</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">expand_decimal</span><span class="p">):</span>
+        <span class="n">num_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliding_window</span><span class="p">(</span><span class="n">expanded</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">prime_dig</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num_int</span><span class="p">))</span> <span class="o">==</span> <span class="n">prime_dig</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="n">num_int</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">num_int</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">expand_decimal</span> <span class="o">-</span> <span class="n">prime_dig</span><span class="p">:</span>
+            <span class="k">return</span><span class="p">(</span><span class="s2">&quot;There is no prime with specified length within the decimal expansion of the expression&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="o">%%</span><span class="n">file</span> <span class="n">test_main_function</span><span class="o">.</span><span class="n">py</span>
+
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">functions</span> <span class="kn">import</span> <span class="n">expand</span><span class="p">,</span> <span class="n">check_prime</span><span class="p">,</span> <span class="n">sliding_window</span>
+<span class="kn">from</span> <span class="nn">main_function</span> <span class="kn">import</span> <span class="n">prime_in_num</span>
+
+<span class="k">class</span> <span class="nc">TestHelpers</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_main</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">prime_in_num</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="mi">7427466391</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">prime_in_num</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">14159</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">prime_in_num</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">4159</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="err">!</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">unittest</span> <span class="n">test_main_function</span><span class="o">.</span><span class="n">py</span>
+</code></pre></div>
+
+<p>The test returns OK, which means the main function works well.</p>
+<h2>2.7 Solve the problem<a name="section7"></a></h2>
+<p>Find 10-digit prime in decimal expansion of 17pi.</p>
+<div class="highlight"><pre><span></span><code><span class="n">prime_in_num</span><span class="p">(</span><span class="mi">17</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The result returns 8649375157.</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/blog-on-homework-1.html" rel="bookmark"
+                           title="Permalink to Blog on Homework 1">Blog on Homework 1</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2021-09-03T00:00:00-04:00">
                 Published: Fri 03 September 2021
@@ -30,7 +262,7 @@
         </address>
 <p>In <a href="/category/misc.html">misc</a>.</p>
 
-</footer><!-- /.post-info --><p>In this blog, my solutions of 3 small questions from <a href="https://projecteuler.net/archives">Euler Project</a> will be explained. They are problem 6, 34 and 80.</p>
+</footer><!-- /.post-info -->                <p>In this blog, my solutions of 3 small questions from <a href="https://projecteuler.net/archives">Euler Project</a> will be explained. They are problem 6, 34 and 80.</p>
 <p>Blog outline:</p>
 <ul>
 <li><a href="#section1">1.1 Sum square difference</a></li>
@@ -38,92 +270,12 @@
 <li><a href="#section3">1.3 Square root digital expansion</a></li>
 </ul>
 <h2>1.1 Sum square difference<a name="section1"></a></h2>
-<p>This is problem 6 from the <a href="https://projecteuler.net/archives">Euler Project</a>. Solved by 496,347 up to now.</p>
-<p>Here is the question: Find the difference between the sum of the squares of the first 100 natural numbers and square of their sum.</p>
-<p>This question is quite straightforward. </p>
-<ol>
-<li>The square of the sum of first 100 numbers can be computed directly. </li>
-<li>We can loop through the 100 numbers to calculate the square of each number then sum them up. </li>
-<li>The final step is finding difference of these two components by subtraction.</li>
-</ol>
-<p>The function looks like this:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">square_diff</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Return difference of the sum of squares of first 100 number and square of their sum.&quot;&quot;&quot;</span>
-    <span class="n">lst</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>    
-    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">)</span>
-</code></pre></div>
-
-<h2>1.2 Digit factorials<a name="section2"></a></h2>
-<p>This is problem 34 from the <a href="https://projecteuler.net/archives">Euler Project</a>. Solved by 95,112 up to now.</p>
-<p>Here is the question: Find the sum of all numbers which are equal to the sum of the factorial of their digits.</p>
-<p>The intuitive train of thought is to first check the sum of the factorial of the digits, then if this sum equals to the number, means it satisfies the criteria, we should add the number to the final sum.</p>
-<ol>
-<li>
-<p>As we know the there are only 9 kinds of factorial result of a digit, so I first create the factorial dictionary in order to simplify the further repeated factorial calculations.</p>
-</li>
-<li>
-<p>To choose the upper bound of the loop range, we know if the number has more than 7 digits, then no matter how many digits it has, say n, then multiply n by 9! will less than the number itself. Thus we can choose the upper bound as factorial of 9 multiplied by 7 to save energy. Also from the problem, we follow the instructions to exclude 1 and 2 so the lower bound is 3.</p>
-</li>
-<li>
-<p>Then the main idea to calculate sum of the factorial of the digits is converting the number to string for the inner loop of digits' factorial. Make digits in the number to a list and find corresponding factorial from the factorial list for further summation.</p>
-</li>
-<li>
-<p>Finally, after checking the equalization of sum of digits factorial and the number, we can add satisfied numbers to the total sum.</p>
-</li>
-</ol>
-<p>The function looks like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">math</span>
-
-<span class="k">def</span> <span class="nf">dig_factorial</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Return sum of all numbers which are equal to the sum of the factorial of their digits.&quot;&quot;&quot;</span>    
-
-    <span class="c1"># create factorial dictionary for simplicity</span>
-    <span class="n">fact_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">)]</span>
-    <span class="n">tot_sum</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span> <span class="o">*</span> <span class="mi">7</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">sum</span><span class="p">([</span><span class="n">fact_list</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>
-            <span class="n">tot_sum</span> <span class="o">+=</span> <span class="n">i</span>      
-
-    <span class="k">return</span> <span class="n">tot_sum</span>
-</code></pre></div>
-
-<h2>1.3 Square root digital expansion<a name="section3"></a></h2>
-<p>This is problem 80 from the <a href="https://projecteuler.net/archives">Euler Project</a>. Solved by 19,755 up to now.</p>
-<p>Here is the Question: For the first one hundred natural numbers, find the total of the digital sums of the first one hundred decimal digits for all the irrational square roots.</p>
-<p>A thing I noticed is that if we find square root of a number directly, it will only return several digits which is not enough for this question. Thus, we can leverage the package <code>decimal</code> to extract decimal with specified precision.</p>
-<ol>
-<li>
-<p>The logic of this question is firstly, check if the number has irrational square root, if the residual of the square root divided by 1 is not 0, this means the number is irrational.</p>
-</li>
-<li>
-<p>Then we process the number to find summation of its digit. But before that we should replace the dot in square root of the number to nothing in order to do summation easier. Checking with the question in Euler, it says for square root of number 2, digital sum of its first one hundred decimal digits is 475, which is the sum of digits start from the very beginning (including the integer part), so we stick with this rule.</p>
-</li>
-<li>
-<p>For each irrational number, we design a inner loop of digits to calculate sum. The idea is similar to the second question, which is making digits first into string and then convert back. Finally, we add all digital sums of  first 100 digits of irrational square roots in first 100 number.</p>
-</li>
-</ol>
-<p>The function looks like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="k">def</span> <span class="nf">root_expan</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Return total of the digital sums of the first 100 decimal digits for all the irrational square roots&quot;&quot;&quot;</span>
-
-    <span class="n">getcontext</span><span class="p">()</span><span class="o">.</span><span class="n">prec</span> <span class="o">=</span> <span class="mi">102</span>   
-    <span class="n">tot</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">):</span>
-
-        <span class="c1"># indicates the square root of the number is irrational</span>
-        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">:</span> 
-            <span class="n">dec_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)[:</span><span class="mi">100</span><span class="p">]</span>             
-            <span class="n">sum_dec</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">dec_string</span><span class="p">:</span>
-                <span class="n">sum_dec</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
-            <span class="n">tot</span> <span class="o">+=</span> <span class="n">sum_dec</span>
-
-    <span class="k">return</span> <span class="n">tot</span>
-</code></pre></div>                </article>
-            </aside><!-- /#featured -->
+<p>This is problem 6 from the …</p>
+                <a class="readmore" href="/blog-on-homework-1.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>links</h2>
