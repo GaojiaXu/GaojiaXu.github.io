@@ -37,7 +37,7 @@
 <p>In <a href="/category/misc.html">misc</a>.</p>
 
 </footer><!-- /.post-info -->      <p>Number theory and a Google recruitment puzzle</p>
-<p>In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and a main function.</p>
+<p>In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and use them to create a main function.</p>
 <p>Blog outline:</p>
 <ul>
 <li><a href="#section1">2.1 Generate expansion of expression.</a></li>
@@ -67,16 +67,16 @@
 <p>Second, write a function to check if a number is prime.</p>
 <p>The idea of this function follows Sieve of Eratosthenes. After considering some special case, such that number 2 is a prime, we can first sieve all even numbers because they are not prime, can be divided by 2. Then we can sieve multiples of odd numbers in a specific range, setting the upper bound as the square root of the number is economic way, and add 1 to be safer, and we skip the even numbers because we already sieve for 2. </p>
 <p>The function looks like this:</p>
-<div class="highlight"><pre><span></span><code><span class="err">def check_prime(n):</span>
-<span class="err">    &quot;&quot;&quot;Check if the number is a prime&quot;&quot;&quot;</span>
-<span class="err">    if n == 2:</span>
-<span class="err">        return True</span>
-<span class="err">    if n &lt;= 1 or n % 2 == 0:</span>
-<span class="err">        return False</span>
-<span class="err">    for i in range(3, int(np.sqrt(n)) + 1, 2):</span>
-<span class="err">        if n % i == 0:</span>
-<span class="err">            return False</span>
-<span class="err">    return True</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">check_prime</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if the number is a prime&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div>
 
 <h2>2.3 Generate sliding windows<a name="section3"></a></h2>
@@ -94,6 +94,7 @@
 </code></pre></div>
 
 <h2>2.4 Unit test for 3 functions<a name="section4"></a></h2>
+<p>We use unit test to check if 3 functions work.</p>
 <div class="highlight"><pre><span></span><code><span class="o">%%</span><span class="n">file</span> <span class="n">functions</span><span class="o">.</span><span class="n">py</span>
 
 <span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
@@ -239,7 +240,7 @@
 
 <p>The test returns OK, which means the main function works well.</p>
 <h2>2.7 Solve the problem<a name="section7"></a></h2>
-<p>Find 10-digit prime in decimal expansion of $17*\pi$</p>
+<p>Find 10-digit prime in decimal expansion of 17pi.</p>
 <div class="highlight"><pre><span></span><code><span class="n">prime_in_num</span><span class="p">(</span><span class="mi">17</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 </code></pre></div>
 

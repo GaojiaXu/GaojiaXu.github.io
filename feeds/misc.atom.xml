@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>BIOSTAT-823-2021Fall Homework Blog - misc</title><link href="/" rel="alternate"></link><link href="/feeds/misc.atom.xml" rel="self"></link><id>/</id><updated>2021-09-17T00:00:00-04:00</updated><subtitle></subtitle><entry><title>Blog on Homework 2</title><link href="/blog-on-homework-2.html" rel="alternate"></link><published>2021-09-17T00:00:00-04:00</published><updated>2021-09-17T00:00:00-04:00</updated><author><name>Gaojia Xu</name></author><id>tag:None,2021-09-17:/blog-on-homework-2.html</id><summary type="html">&lt;p&gt;Number theory and a Google recruitment puzzle&lt;/p&gt;
-&lt;p&gt;In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and a main function.&lt;/p&gt;
+&lt;p&gt;In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and use them to create a main function.&lt;/p&gt;
 &lt;p&gt;Blog outline:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="#section1"&gt;2.1 Generate expansion of expression.&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#section2"&gt;2.2 Check if a number is …&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</summary><content type="html">&lt;p&gt;Number theory and a Google recruitment puzzle&lt;/p&gt;
-&lt;p&gt;In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and a main function.&lt;/p&gt;
+&lt;li&gt;&lt;a href="#section2"&gt;2.2 Check …&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</summary><content type="html">&lt;p&gt;Number theory and a Google recruitment puzzle&lt;/p&gt;
+&lt;p&gt;In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and use them to create a main function.&lt;/p&gt;
 &lt;p&gt;Blog outline:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="#section1"&gt;2.1 Generate expansion of expression.&lt;/a&gt;&lt;/li&gt;
@@ -35,16 +35,16 @@
 &lt;p&gt;Second, write a function to check if a number is prime.&lt;/p&gt;
 &lt;p&gt;The idea of this function follows Sieve of Eratosthenes. After considering some special case, such that number 2 is a prime, we can first sieve all even numbers because they are not prime, can be divided by 2. Then we can sieve multiples of odd numbers in a specific range, setting the upper bound as the square root of the number is economic way, and add 1 to be safer, and we skip the even numbers because we already sieve for 2. &lt;/p&gt;
 &lt;p&gt;The function looks like this:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;def check_prime(n):&lt;/span&gt;
-&lt;span class="err"&gt;    &amp;quot;&amp;quot;&amp;quot;Check if the number is a prime&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-&lt;span class="err"&gt;    if n == 2:&lt;/span&gt;
-&lt;span class="err"&gt;        return True&lt;/span&gt;
-&lt;span class="err"&gt;    if n &amp;lt;= 1 or n % 2 == 0:&lt;/span&gt;
-&lt;span class="err"&gt;        return False&lt;/span&gt;
-&lt;span class="err"&gt;    for i in range(3, int(np.sqrt(n)) + 1, 2):&lt;/span&gt;
-&lt;span class="err"&gt;        if n % i == 0:&lt;/span&gt;
-&lt;span class="err"&gt;            return False&lt;/span&gt;
-&lt;span class="err"&gt;    return True&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;check_prime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Check if the number is a prime&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;False&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;False&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;2.3 Generate sliding windows&lt;a name="section3"&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -62,6 +62,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;2.4 Unit test for 3 functions&lt;a name="section4"&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;We use unit test to check if 3 functions work.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="n"&gt;functions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;
 
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sympy&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
@@ -207,7 +208,7 @@
 
 &lt;p&gt;The test returns OK, which means the main function works well.&lt;/p&gt;
 &lt;h2&gt;2.7 Solve the problem&lt;a name="section7"&gt;&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Find 10-digit prime in decimal expansion of $17*\pi$&lt;/p&gt;
+&lt;p&gt;Find 10-digit prime in decimal expansion of 17pi.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;prime_in_num&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;17&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;pi&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
