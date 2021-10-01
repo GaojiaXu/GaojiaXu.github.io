@@ -70,7 +70,6 @@ starting with the <a href="https://github.com/rfordatascience/tidytuesday/tree/m
 <p><a name="section2"></a></p>
 <h2>3.2 Plot2</h2>
 <p>From another view, the graph below shows the line plots of Malaria Death of each entity, if we want to see specific trend in one entity, we can double click the name on the right to only display the line plot for that entity.</p>
-<p>The function looks like this:</p>
 <div class="highlight"><pre><span></span><code><span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">df_death</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Death(per 100,000 people)&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;Entity&#39;</span><span class="p">,</span>
               <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Malaria Death(per 100,000 people) in Entites&quot;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">line</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">width</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
