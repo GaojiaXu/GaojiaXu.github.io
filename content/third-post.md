@@ -5,7 +5,7 @@ author: Gaojia Xu
 Creating effective visualizations using [best practices](https://rafalab.github.io/dsbook/data-visualization-principles.html)
 starting with the [data sets](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-11-13).
 
-I chose the library plotly because it is easy to use, it is also quite similar to the R shiny application form that I was used to. This library is powerful that we can make animations based on the data, design the widgets and layout by ourselves.
+I chose the library plotly and ipywidgets because they are easy to use, it is also quite similar to the R shiny application form that I was used to. This library is powerful that we can make animations based on the data, design the widgets and layout by ourselves.
 
 Blog outline:
 
