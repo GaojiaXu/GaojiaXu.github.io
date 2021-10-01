@@ -59,7 +59,7 @@ fig.update_traces(line = dict(width = 1))
 Plot3 means to display the interaction of Malaria Incidence and Death. Moreover, there are two user-chosen entites that can be compared on the graph. The dot for each entity is connected by Year chronologically. 
 
 
-```
+```python
 df_inc = pd.read_csv("malaria_inc.csv")
 df_inc = df_inc.set_axis(['Entity', 'Code', 'Year', 'Incidence(per 1000 people at risk)'], axis=1)
 df2 = df_inc.merge(df_death, on=["Entity","Code","Year"])
