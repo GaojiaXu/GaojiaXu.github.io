@@ -43,7 +43,6 @@ starting with the <a href="https://github.com/rfordatascience/tidytuesday/tree/m
 <p><a name="section1"></a></p>
 <h2>3.1 Plot1</h2>
 <p>From this plot, each point indicate an entity. We can see change of malaria death of entities by year. While most of the death numbers per 100,000 people of entities maintain close to 0 throughout the 26 years, there are entites with much higher death nubmers and we can see movement of these points by the animation.</p>
-<p>The function looks like this:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
@@ -74,7 +73,6 @@ starting with the <a href="https://github.com/rfordatascience/tidytuesday/tree/m
 <p><a name="section3"></a></p>
 <h2>3.3 Plot3</h2>
 <p>Plot3 means to display the interaction of Malaria Incidence and Death. Moreover, there are two user-chosen entites that can be compared on the graph. The dot for each entity is connected by Year chronologically. </p>
-<p>The function looks like this:</p>
 <div class="highlight"><pre><span></span><code><span class="n">df_inc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="ss">&quot;malaria_inc.csv&quot;</span><span class="p">)</span><span class="w"></span>
 <span class="n">df_inc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df_inc</span><span class="p">.</span><span class="n">set_axis</span><span class="p">(</span><span class="o">[</span><span class="n">&#39;Entity&#39;, &#39;Code&#39;, &#39;Year&#39;, &#39;Incidence(per 1000 people at risk)&#39;</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
 <span class="n">df2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df_inc</span><span class="p">.</span><span class="k">merge</span><span class="p">(</span><span class="n">df_death</span><span class="p">,</span><span class="w"> </span><span class="k">on</span><span class="o">=[</span><span class="n">&quot;Entity&quot;,&quot;Code&quot;,&quot;Year&quot;</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
