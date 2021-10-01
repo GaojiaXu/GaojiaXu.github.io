@@ -46,7 +46,6 @@ fig.show()
 
 From another view, the graph below shows the line plots of Malaria Death of each entity, if we want to see specific trend in one entity, we can double click the name on the right to only display the line plot for that entity.
 
-The function looks like this:
 
 ```python
 fig = px.line(df_death, x = "Year", y = "Death(per 100,000 people)", color = 'Entity',
