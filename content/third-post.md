@@ -20,7 +20,6 @@ Blog outline:
 
 From this plot, each point indicate an entity. We can see change of malaria death of entities by year. While most of the death numbers per 100,000 people of entities maintain close to 0 throughout the 26 years, there are entites with much higher death nubmers and we can see movement of these points by the animation.
 
-The function looks like this:
 
 ```python
 
@@ -60,8 +59,6 @@ fig.update_traces(line = dict(width = 1))
 
 Plot3 means to display the interaction of Malaria Incidence and Death. Moreover, there are two user-chosen entites that can be compared on the graph. The dot for each entity is connected by Year chronologically. 
 
-
-The function looks like this:
 
 ```
 df_inc = pd.read_csv("malaria_inc.csv")
