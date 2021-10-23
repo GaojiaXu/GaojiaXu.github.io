@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
+        <title>Blog on Homework 3</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="BIOSTAT-823-2021Fall Homework Blog Atom Feed" />
+        <meta name="description" content="Creating effective visualizations using best practices starting with the data sets. I chose the library plotly and ipywidgets because they are..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">BIOSTAT-823-2021Fall Homework Blog</a></h1>
+                <nav><ul>
+                    <li><a href="/pages/about.html">About</a></li>
+                    <li class="active"><a href="/category/misc.html">misc</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/blog-on-homework-3.html" rel="bookmark"
+           title="Permalink to Blog on Homework 3">Blog on Homework 3</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-10-01T00:00:00-04:00">
+                Published: Fri 01 October 2021
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/gaojia-xu.html">Gaojia Xu</a>
+        </address>
+<p>In <a href="/category/misc.html">misc</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Creating effective visualizations using <a href="https://rafalab.github.io/dsbook/data-visualization-principles.html">best practices</a>
+starting with the <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-11-13">data sets</a>.</p>
+<p>I chose the library plotly and ipywidgets because they are easy to use, it is also quite similar to the R shiny application form that I was used to. This library is powerful that we can make animations based on the data, design the widgets and layout by ourselves.</p>
+<p>Blog outline:</p>
+<ul>
+<li><a href="#section1">3.1 Plot1</a></li>
+<li><a href="#section2">3.2 Plot2</a></li>
+<li><a href="#section3">3.3 Plot3</a></li>
+<li><a href="#section4">3.4 Plot4</a></li>
+</ul>
+<p><a name="section1"></a></p>
+<h2>3.1 Plot1</h2>
+<p>From this plot, each point indicate an entity. We can see change of malaria death of entities by year. While most of the death numbers per 100,000 people of entities maintain close to 0 throughout the 26 years, there are entites with much higher death nubmers and we can see movement of these points by the animation.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">import</span> <span class="nn">plotly.figure_factory</span> <span class="k">as</span> <span class="nn">ff</span>
+<span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+<span class="n">df_death</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;malaria_deaths.csv&quot;</span><span class="p">)</span>
+<span class="n">df_death</span> <span class="o">=</span> <span class="n">df_death</span><span class="o">.</span><span class="n">set_axis</span><span class="p">([</span><span class="s1">&#39;Entity&#39;</span><span class="p">,</span> <span class="s1">&#39;Code&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Death(per 100,000 people)&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df_death</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Death(per 100,000 people)&quot;</span><span class="p">,</span> <span class="n">animation_frame</span><span class="o">=</span><span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="n">animation_group</span><span class="o">=</span><span class="s2">&quot;Entity&quot;</span><span class="p">,</span>         
+           <span class="n">hover_name</span><span class="o">=</span><span class="s2">&quot;Entity&quot;</span><span class="p">,</span>
+           <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Malaria Death(per 100,000 people) in entities&quot;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Entites&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+<p><a name="section2"></a></p>
+<h2>3.2 Plot2</h2>
+<p>From another view, the graph below shows the line plots of Malaria Death of each entity, if we want to see specific trend in one entity, we can double click the name on the right to only display the line plot for that entity.</p>
+<div class="highlight"><pre><span></span><code><span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">df_death</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Death(per 100,000 people)&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;Entity&#39;</span><span class="p">,</span>
+              <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Malaria Death(per 100,000 people) in Entites&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">line</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">width</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+</code></pre></div>
+
+<p><a name="section3"></a></p>
+<h2>3.3 Plot3</h2>
+<p>Plot3 means to display the interaction of Malaria Incidence and Death. Moreover, there are two user-chosen entites that can be compared on the graph. The dot for each entity is connected by Year chronologically. </p>
+<div class="highlight"><pre><span></span><code><span class="n">df_inc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;malaria_inc.csv&quot;</span><span class="p">)</span>
+<span class="n">df_inc</span> <span class="o">=</span> <span class="n">df_inc</span><span class="o">.</span><span class="n">set_axis</span><span class="p">([</span><span class="s1">&#39;Entity&#39;</span><span class="p">,</span> <span class="s1">&#39;Code&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Incidence(per 1000 people at risk)&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">df_inc</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_death</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Entity&quot;</span><span class="p">,</span><span class="s2">&quot;Code&quot;</span><span class="p">,</span><span class="s2">&quot;Year&quot;</span><span class="p">])</span>
+
+
+<span class="c1">#design and display widgets</span>
+<span class="n">entity1</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Entity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;Botswana&#39;</span><span class="p">,</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Entity 1:&#39;</span><span class="p">,</span>
+    <span class="n">continuous_update</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="n">entity2</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Entity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;Djibouti&#39;</span><span class="p">,</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Entity 2:&#39;</span><span class="p">,</span>
+    <span class="n">continuous_update</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="n">container</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">HBox</span><span class="p">([</span><span class="n">entity1</span><span class="p">,</span> <span class="n">entity2</span><span class="p">])</span>
+
+<span class="c1">#current dataframe for line charts</span>
+<span class="n">curr_df1</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">entity1</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span>
+<span class="n">curr_df2</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">entity2</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span>
+
+<span class="c1">#specify the line charts and layout</span>
+<span class="n">trace1</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">curr_df1</span><span class="p">[</span><span class="s1">&#39;Incidence(per 1000 people at risk)&#39;</span><span class="p">],</span> 
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">curr_df1</span><span class="p">[</span><span class="s1">&#39;Death(per 100,000 people)&#39;</span><span class="p">],</span>
+                    <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;lines+markers+text&quot;</span><span class="p">,</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="n">curr_df1</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">],</span>
+                    <span class="n">textposition</span> <span class="o">=</span> <span class="s2">&quot;bottom right&quot;</span><span class="p">,</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">entity1</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="n">trace2</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">curr_df2</span><span class="p">[</span><span class="s1">&#39;Incidence(per 1000 people at risk)&#39;</span><span class="p">],</span> 
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">curr_df2</span><span class="p">[</span><span class="s1">&#39;Death(per 100,000 people)&#39;</span><span class="p">],</span>
+                    <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;lines+markers+text&quot;</span><span class="p">,</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="n">curr_df2</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">],</span>
+                    <span class="n">textposition</span> <span class="o">=</span>  <span class="s2">&quot;bottom right&quot;</span><span class="p">,</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">entity2</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">trace1</span><span class="p">,</span><span class="n">trace2</span><span class="p">],</span>
+                    <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Malaria incidence(per 1,000 population at risk) and deaths(per 100,000 people)&#39;</span><span class="p">),</span>
+                    <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;seaborn&#39;</span><span class="p">))</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Incidence(per 1000 people at risk)&#39;</span>
+<span class="n">g</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Death(per 100,000 people)&#39;</span>
+
+<span class="c1">#how to update the chart</span>
+<span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Update of line charts&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">g</span><span class="o">.</span><span class="n">batch_update</span><span class="p">():</span>
+        <span class="n">curr_df1</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">entity1</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span>
+        <span class="n">curr_df2</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">entity2</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">curr_df1</span><span class="p">[</span><span class="s1">&#39;Incidence(per 1000 people at risk)&#39;</span><span class="p">]</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">curr_df1</span><span class="p">[</span><span class="s1">&#39;Death(per 100,000 people)&#39;</span><span class="p">]</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">entity1</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">g</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">curr_df2</span><span class="p">[</span><span class="s1">&#39;Incidence(per 1000 people at risk)&#39;</span><span class="p">]</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">curr_df2</span><span class="p">[</span><span class="s1">&#39;Death(per 100,000 people)&#39;</span><span class="p">]</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">entity2</span><span class="o">.</span><span class="n">value</span>
+
+
+<span class="n">entity1</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">get_data</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+<span class="n">entity2</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">get_data</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+<span class="n">widgets</span><span class="o">.</span><span class="n">VBox</span><span class="p">([</span><span class="n">container</span><span class="p">,</span><span class="n">g</span><span class="p">])</span>
+</code></pre></div>
+
+<p><a name="section4"></a></p>
+<h2>3.4 Plot4</h2>
+<p>Plot4 shows the Malaria death partitioned by 5 age groups. The user can specify widgets about the entity and year.</p>
+<div class="highlight"><pre><span></span><code><span class="n">df_death_age</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;malaria_deaths_age.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="s1">&#39;Unnamed: 0&#39;</span><span class="p">)</span>
+<span class="n">df_death_age</span> <span class="o">=</span> <span class="n">df_death_age</span><span class="o">.</span><span class="n">set_axis</span><span class="p">([</span><span class="s1">&#39;Entity&#39;</span><span class="p">,</span> <span class="s1">&#39;Code&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;Deaths&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_death_age</span><span class="p">[</span><span class="s1">&#39;Age_group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_death_age</span><span class="p">[</span><span class="s1">&#39;Age_group&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;14-May&#39;</span><span class="p">,</span><span class="s1">&#39;5-14&#39;</span><span class="p">)</span>
+
+<span class="c1">#design and display widgets</span>
+<span class="n">entity</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df_death_age</span><span class="p">[</span><span class="s1">&#39;Entity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;Afghanistan&#39;</span><span class="p">,</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Entity:&#39;</span><span class="p">,</span>
+    <span class="n">continuous_update</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">year</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="mi">1990</span><span class="p">,</span>
+    <span class="nb">min</span> <span class="o">=</span> <span class="mi">1990</span><span class="p">,</span>
+    <span class="nb">max</span> <span class="o">=</span> <span class="mi">2016</span><span class="p">,</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Year&#39;</span><span class="p">,</span>
+    <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">,</span>
+    <span class="n">continuous_update</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">container</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">VBox</span><span class="p">([</span><span class="n">entity</span><span class="p">,</span> <span class="n">year</span><span class="p">])</span>
+
+<span class="c1">#current dataframe for pie charts</span>
+<span class="n">cur_df</span> <span class="o">=</span> <span class="n">df_death_age</span><span class="p">[(</span><span class="n">df_death_age</span><span class="p">[</span><span class="s1">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">entity</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_death_age</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span>
+
+<span class="c1">#specify the pie chart and layout</span>
+<span class="n">trace1</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Pie</span><span class="p">(</span><span class="n">labels</span> <span class="o">=</span> <span class="n">cur_df</span><span class="p">[</span><span class="s1">&#39;Age_group&#39;</span><span class="p">],</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">cur_df</span><span class="p">[</span><span class="s1">&#39;Deaths&#39;</span><span class="p">])</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">trace1</span><span class="p">],</span>
+                    <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Malaria death by age group&#39;</span><span class="p">),</span>
+                    <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;seaborn&#39;</span><span class="p">))</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Year&#39;</span>
+<span class="n">g</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Death number&#39;</span>
+
+<span class="c1">#how to update the chart</span>
+<span class="k">def</span> <span class="nf">get_data2</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Update pie charts&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">g</span><span class="o">.</span><span class="n">batch_update</span><span class="p">():</span>
+        <span class="n">cur_df</span> <span class="o">=</span> <span class="n">df_death_age</span><span class="p">[(</span><span class="n">df_death_age</span><span class="p">[</span><span class="s1">&#39;Entity&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">entity</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_death_age</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">cur_df</span><span class="p">[</span><span class="s1">&#39;Age_group&#39;</span><span class="p">]</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">cur_df</span><span class="p">[</span><span class="s1">&#39;Deaths&#39;</span><span class="p">]</span>
+
+<span class="n">entity</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">get_data2</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+<span class="n">year</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">get_data2</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+<span class="n">widgets</span><span class="o">.</span><span class="n">VBox</span><span class="p">([</span><span class="n">container</span><span class="p">,</span><span class="n">g</span><span class="p">])</span>
+</code></pre></div>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="https://getpelican.com/">Pelican</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="https://github.com/cliburn/bios-823-2021/blob/main/homework/assignments.md">Assignment.md</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

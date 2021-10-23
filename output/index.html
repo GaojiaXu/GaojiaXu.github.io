@@ -19,7 +19,202 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/blog-on-homework-2.html">Blog on Homework 2</a></h1>
+                    <h1 class="entry-title"><a href="/blog-on-homework-4.html">Blog on Homework 4</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2021-10-23T00:00:00-04:00">
+                Published: Sat 23 October 2021
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/gaojia-xu.html">Gaojia Xu</a>
+        </address>
+<p>In <a href="/category/misc.html">misc</a>.</p>
+
+</footer><!-- /.post-info --><p>In this homework, we suppose to leverage <a href="https://ncses.nsf.gov/pubs/nsf19301/data">Science and Engineering PhDs awarded in the US</a>. Do some analysis in <code>pandas</code>. Make a <a href="https://pyviz.org/dashboarding/">dashboard visualization</a> of a few interesting aspects of the data.</p>
+<p>I use streamlit as the tool to create the dashboard visualization, because it is new and easy to implement.</p>
+<p>In the py file, I try to make different sections for various purposes, thus in the left navigation panel, they are <code>Introduction</code>,<code>Doctorate Recipients and Institution Number through Years</code>,<code>Doctorate Recipients Distribution by Major Field of Study</code> and <code>Doctorate Recipients Distribution by Ethinicity/Race</code> which the user can explore on. </p>
+<p>At some navigation pages, use can specify the value of interests, such as year and ethnicity/race. Below are my codes used to generate this application.</p>
+<p>Blog outline:</p>
+<ul>
+<li><a href="#section1">4.1 "Introduction"</a></li>
+<li><a href="#section2">4.2 Doctorate Recipients and Institution Number through Years</a></li>
+<li><a href="#section3">4.3 Doctorate Recipients Distribution by Major Field of Study</a></li>
+<li><a href="#section4">4.4 Doctorate Recipients Distribution by Ethinicity/Race</a></li>
+</ul>
+<p><a name="section1"></a></p>
+<h2>4.1 "Introduction"</h2>
+<p>As preparation, we should load the data first and use pandas to clean our dataframe and set the navigation bar, also there is some basic information about the source of the dataset.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Read in the data</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;sed17-sr-tab002.xlsx&quot;</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">df2</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">,</span><span class="s2">&quot;Doctorate_granting_institutions&quot;</span><span class="p">,</span><span class="s1">&#39;Doctorate recipients&#39;</span><span class="p">,</span><span class="s1">&#39;Mean (per institution)&#39;</span><span class="p">,</span><span class="s1">&#39;Median (per institution)&#39;</span><span class="p">]</span>    
+
+<span class="n">df12</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;sed17-sr-tab012.xlsx&quot;</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">df12_new</span> <span class="o">=</span> <span class="n">df12</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="s2">&quot;Life sciences&quot;</span><span class="p">,</span> <span class="s2">&quot;Physical sciences and earth sciences&quot;</span><span class="p">,</span> 
+                <span class="s2">&quot;Mathematics and computer sciences&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;Psychology and social sciences&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;Engineering&quot;</span><span class="p">,</span><span class="s2">&quot;Education&quot;</span><span class="p">,</span> <span class="s2">&quot;Humanities and arts&quot;</span><span class="p">,</span> <span class="s2">&quot;Other&quot;</span><span class="p">],</span> <span class="p">:]</span>
+
+<span class="n">df19</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;sed17-sr-tab019.xlsx&quot;</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">df19_new</span> <span class="o">=</span> <span class="n">df19</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;U.S. citizen or permanent resident&quot;</span><span class="p">,</span> 
+                             <span class="s2">&quot;Temporary visa holder&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;Temporary visa holdera&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;Unknown citizenship&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;Not Hispanic or Latino&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;All doctorate recipients&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">nav</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">sidebar</span><span class="o">.</span><span class="n">radio</span><span class="p">(</span><span class="s2">&quot;Navigation&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Introduction&quot;</span><span class="p">,</span>
+                                  <span class="s2">&quot;Doctorate Recipients and Institution Number through Years&quot;</span><span class="p">,</span>
+                                  <span class="s2">&quot;Doctorate Recipients Distribution by Major Field of Study&quot;</span><span class="p">,</span>
+                                  <span class="s2">&quot;Doctorate Recipients Distribution by Ethinicity/Race&quot;</span><span class="p">])</span>
+
+<span class="c1">#navigation choice 1</span>
+<span class="k">if</span> <span class="n">nav</span> <span class="o">==</span> <span class="s2">&quot;Introduction&quot;</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s1">&#39;Exploration of Doctorate Information in the U.S.&#39;</span><span class="p">)</span>
+
+    <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">,</span> <span class="n">col3</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;phd_image.jpg&#39;</span><span class="p">)</span>
+    <span class="n">col2</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">use_column_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s1">&#39;Hi there, this simple applicaiton aims to provide some direct illustrations based on [Science and Engineering PhDs awarded in the US](https://ncses.nsf.gov/pubs/nsf19301/data) datasets, please check the website if you are interested, the datasets had been used are table 2, 12, 19. The code to generate this application had been uploaded to [Blog of Gaojia](https://gaojiaxu.github.io)&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><a name="section2"></a></p>
+<h2>4.2 Doctorate Recipients and Institution Number through Years</h2>
+<p>Here we have the plot for general information of number of Doctorate recipients and Doctorate granting institutions in the United States, displayed in line charts and histograms. </p>
+<div class="highlight"><pre><span></span><code><span class="c1">#navigation choice 2</span>
+<span class="k">if</span> <span class="n">nav</span> <span class="o">==</span> <span class="s2">&quot;Doctorate Recipients and Institution Number through Years&quot;</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s1">&#39;General Doctorate Recipients and Granting Institution Number through Years&#39;</span><span class="p">)</span>
+
+    <span class="c1">#first plot</span>
+    <span class="n">fig1</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Doctorate recipients&quot;</span><span class="p">,</span>
+                  <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Number of Doctorate recipients in 1973~2017&quot;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">fig1</span><span class="p">)</span>
+
+    <span class="c1">#second plot</span>
+    <span class="n">fig2</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Doctorate_granting_institutions&quot;</span><span class="p">,</span>
+                   <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Number of Doctorate granting institutions in 1973~2017&quot;</span><span class="p">,</span> 
+                   <span class="n">nbins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+    <span class="n">fig2</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">bargap</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">yaxis_title_text</span><span class="o">=</span><span class="s1">&#39;Doctorate grating institutions number&#39;</span><span class="p">,</span>
+                  <span class="n">yaxis_range</span><span class="o">=</span><span class="p">[</span><span class="mi">250</span><span class="p">,</span><span class="mi">450</span><span class="p">])</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">fig2</span><span class="p">)</span>
+
+    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;From the above plot, there are general increasing trends of both number of doctorate recipients and number of doctorate granting institutions from 1973 to 2017. You may explore deeper about related information from the left sidebar.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><a name="section3"></a></p>
+<h2>4.3 Doctorate Recipients Distribution by Major Field of Study</h2>
+<p>In navigation choice 3, there is a pie chart of Proportion of Doctorate recipients by major field of study. There are 8 categories and a dataframe of their number and percentages are shown below the pie chart for clarification.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">#navigation choice 3</span>
+<span class="k">if</span> <span class="n">nav</span> <span class="o">==</span> <span class="s2">&quot;Doctorate Recipients Distribution by Major Field of Study&quot;</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s1">&#39;Doctorate Recipients Distribution by Major Field of Study&#39;</span><span class="p">)</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">sidebar</span><span class="o">.</span><span class="n">slider</span><span class="p">(</span><span class="s1">&#39;You may specify a year&#39;</span><span class="p">,</span> <span class="n">min_value</span> <span class="o">=</span> <span class="mi">1987</span><span class="p">,</span> <span class="n">max_value</span> <span class="o">=</span> <span class="mi">2017</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;The year you have chosen is &#39;</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">year</span><span class="p">:</span>
+        <span class="n">df12_new_graph</span> <span class="o">=</span> <span class="n">df12_new</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">df12_new</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="n">year</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">df12_new_graph</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df12_new_graph</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">droplevel</span><span class="p">()</span>
+
+        <span class="c1">#third plot    </span>
+        <span class="n">fig3</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">df12_new_graph</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="s2">&quot;Number&quot;</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">df12_new_graph</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> 
+              <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Proportion of Doctorate Recipients by Major Field of Study in &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">))</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">fig3</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;If we output as a dataframe, 8 categories have number and percentage of total doctorate recipients in &quot;</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="s2">&quot; as below: &quot;</span><span class="p">)</span>
+
+        <span class="c1">#related dataframe</span>
+        <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">,</span> <span class="n">col3</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">col2</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">df12_new_graph</span><span class="p">)</span>
+</code></pre></div>
+
+<p><a name="section4"></a></p>
+<h2>4.4 Doctorate Recipients Distribution by Ethinicity/Race</h2>
+<p>In navigation choice 4, there is a combination of 3 line charts to show changes of specific ethnicities/races number and percentage through years. Moreover, there is a pie chart of Proportion of Doctorate recipients by ethnicities/races. </p>
+<div class="highlight"><pre><span></span><code><span class="c1">#navigation choice 4</span>
+<span class="k">if</span> <span class="n">nav</span> <span class="o">==</span> <span class="s2">&quot;Doctorate Recipients Distribution by Ethinicity/Race&quot;</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s2">&quot;Doctorate Recipients Distribution by Ethinicity/Race&quot;</span><span class="p">)</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">multiselect</span><span class="p">(</span><span class="s1">&#39;For the below line charts, please choose 3 Ethnicity/Race group:&#39;</span><span class="p">,</span>
+     <span class="p">[</span><span class="s1">&#39;Hispanic or Latino&#39;</span><span class="p">,</span> <span class="s1">&#39;American Indian or Alaska Native&#39;</span><span class="p">,</span> <span class="s1">&#39;Asian&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;Black or African American&#39;</span><span class="p">,</span> <span class="s1">&#39;White&#39;</span><span class="p">,</span> <span class="s1">&#39;More than one race&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;Other race or race not reported&#39;</span><span class="p">,</span> <span class="s1">&#39;Ethnicity not reported&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;Hispanic or Latino&#39;</span><span class="p">,</span> <span class="s1">&#39;American Indian or Alaska Native&#39;</span><span class="p">,</span> <span class="s1">&#39;Asian&#39;</span><span class="p">])</span>
+
+    <span class="c1">#raise error if length of option is not equal to 3</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">options</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Please choose exactly 3 options.&#39;</span><span class="p">)</span>
+
+    <span class="n">curr_df1</span> <span class="o">=</span> <span class="n">df19_new</span><span class="p">[(</span><span class="n">df19_new</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">options</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="n">curr_df2</span> <span class="o">=</span> <span class="n">df19_new</span><span class="p">[(</span><span class="n">df19_new</span><span class="o">.</span><span class="n">index</span><span class="o">==</span> <span class="n">options</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="n">curr_df3</span> <span class="o">=</span> <span class="n">df19_new</span><span class="p">[(</span><span class="n">df19_new</span><span class="o">.</span><span class="n">index</span><span class="o">==</span> <span class="n">options</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
+
+    <span class="c1">#fourth plot</span>
+    <span class="n">trace1</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">curr_df1</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> 
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">curr_df1</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span>
+                    <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;lines+markers+text&quot;</span><span class="p">,</span>                   
+                    <span class="n">textposition</span> <span class="o">=</span> <span class="s2">&quot;bottom right&quot;</span><span class="p">,</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">trace2</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">curr_df2</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> 
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">curr_df2</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span>
+                        <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;lines+markers+text&quot;</span><span class="p">,</span>
+                        <span class="n">textposition</span> <span class="o">=</span> <span class="s2">&quot;bottom right&quot;</span><span class="p">,</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">trace3</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">curr_df3</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> 
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">curr_df3</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span>
+                        <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;lines+markers+text&quot;</span><span class="p">,</span>
+                        <span class="n">textposition</span> <span class="o">=</span> <span class="s2">&quot;bottom right&quot;</span><span class="p">,</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="n">g</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">trace1</span><span class="p">,</span><span class="n">trace2</span><span class="p">,</span><span class="n">trace3</span><span class="p">],</span>
+                        <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">autosize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Comparison of 3 Ethnicities/Races in Doctorate Recipients through Years&#39;</span><span class="p">)))</span>
+
+    <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">,</span> <span class="n">col3</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">col2</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+
+    <span class="c1">#fifth plot</span>
+    <span class="n">year2</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">slider</span><span class="p">(</span><span class="s1">&#39;For the below pie chart, please specify a year:&#39;</span><span class="p">,</span> 
+                     <span class="n">min_value</span> <span class="o">=</span> <span class="mi">2008</span><span class="p">,</span> <span class="n">max_value</span> <span class="o">=</span> <span class="mi">2017</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="n">fig19</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">df19_new</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">year2</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">df19_new</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> 
+                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Proportion of Doctorate recipients by Ethnicity/Race in &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">year2</span><span class="p">))</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">fig19</span><span class="p">)</span>
+</code></pre></div>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/blog-on-homework-3.html" rel="bookmark"
+                           title="Permalink to Blog on Homework 3">Blog on Homework 3</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-10-01T00:00:00-04:00">
+                Published: Fri 01 October 2021
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/gaojia-xu.html">Gaojia Xu</a>
+        </address>
+<p>In <a href="/category/misc.html">misc</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Creating effective visualizations using <a href="https://rafalab.github.io/dsbook/data-visualization-principles.html">best practices</a>
+starting with the <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-11-13">data sets</a>.</p>
+<p>I chose the library plotly and ipywidgets because they are easy to use, it is also quite similar to the R shiny application form that I was used to. This library is powerful that we can make animations based …</p>
+                <a class="readmore" href="/blog-on-homework-3.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/blog-on-homework-2.html" rel="bookmark"
+                           title="Permalink to Blog on Homework 2">Blog on Homework 2</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2021-09-17T00:00:00-04:00">
                 Published: Fri 17 September 2021
@@ -30,220 +225,15 @@
         </address>
 <p>In <a href="/category/misc.html">misc</a>.</p>
 
-</footer><!-- /.post-info --><p>Number theory and a Google recruitment puzzle</p>
+</footer><!-- /.post-info -->                <p>Number theory and a Google recruitment puzzle</p>
 <p>In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and use them to create a main function.</p>
 <p>Blog outline:</p>
 <ul>
 <li><a href="#section1">2.1 Generate expansion of expression.</a></li>
-<li><a href="#section2">2.2 Check if a number is prime</a></li>
-<li><a href="#section3">2.3 Generate sliding windows</a></li>
-<li><a href="#section4">2.4 Unit test for former 3 functions</a></li>
-<li><a href="#section5">2.5 Main function: find first n-digit prime in the decimal expansion of a number</a></li>
-<li><a href="#section6">2.6 Unit test of main function</a></li>
-<li><a href="#section7">2.7 Solve the problem</a></li>
-</ul>
-<h2>2.1 Generate expansion of expression<a name="section1"></a></h2>
-<p>First we write a function to generate an arbitrary large expansion of a mathematical expression like π.</p>
-<p>We can use directly from <code>sympy</code> package to expand an mathematical expression.</p>
-<p>The function looks like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the expression with decimal length specified&quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">expand_decimal</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The specified digits length of expansion should be a float or an integer&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">N</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">)</span>
-</code></pre></div>
-
-<h2>2.2 Check if a number is prime<a name="section2"></a></h2>
-<p>Second, write a function to check if a number is prime.</p>
-<p>The idea of this function : After considering some special case, such that number 2 is a prime, we can first sieve all even numbers because they are not prime, can be divided by 2. Then we can sieve multiples of odd numbers in a specific range, setting the upper bound as the square root of the number is economic way, and add 1 to be safer, and we skip the even numbers because we already sieve for 2. </p>
-<p>The function looks like this:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">check_prime</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if the number is a prime&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="kc">True</span>
-</code></pre></div>
-
-<h2>2.3 Generate sliding windows<a name="section3"></a></h2>
-<p>Third, write a function to generate sliding windows of a specified width from a long iterable.</p>
-<p>For each input number, create the sliding window from start position and with specified length, if there is dot included, we should split by dot and join all numbers from the int and decimal portion.</p>
-<p>The function looks like this:</p>
-<div class="highlight"><pre><span></span><code><span class="n">def</span> <span class="n">sliding_window</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span><span class="o">:</span>
-    <span class="s">&quot;&quot;&quot;Return the string of the number starts from start position with specified length&quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">type</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">!=</span> <span class="kt">int</span> <span class="n">or</span> <span class="n">type</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="o">!=</span> <span class="kt">int</span><span class="o">:</span>
-        <span class="n">raise</span> <span class="n">TypeError</span><span class="p">(</span><span class="s">&quot;n_len and n_dec need to be integers&quot;</span><span class="p">)</span>
-
-    <span class="n">string</span> <span class="o">=</span> <span class="err">&#39;&#39;</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">num</span><span class="p">).</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">))[</span><span class="nl">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">length</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">string</span>
-</code></pre></div>
-
-<h2>2.4 Unit test for 3 functions<a name="section4"></a></h2>
-<p>We use unit test to check if 3 functions work.</p>
-<div class="highlight"><pre><span></span><code><span class="o">%%</span><span class="n">file</span> <span class="n">functions</span><span class="o">.</span><span class="n">py</span>
-
-<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-
-<span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the expression with decimal length specified&quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">expand_decimal</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The specified digits length of expansion should be a float or an integer&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">N</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">check_prime</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if the number is a prime&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="kc">True</span>
-
-<span class="k">def</span> <span class="nf">sliding_window</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the string of the number starts from start position with specified length&quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;n_len and n_dec need to be integers&quot;</span><span class="p">)</span>
-
-    <span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">))[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">length</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">string</span>
-</code></pre></div>
-
-<div class="highlight"><pre><span></span><code><span class="o">%%</span><span class="n">file</span> <span class="n">test_functions</span><span class="o">.</span><span class="n">py</span>
-
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">from</span> <span class="nn">functions</span> <span class="kn">import</span> <span class="n">expand</span><span class="p">,</span> <span class="n">check_prime</span><span class="p">,</span> <span class="n">sliding_window</span>
-
-
-<span class="k">class</span> <span class="nc">TestHelpers</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">test_expand</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">expand</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="nb">format</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">&#39;.3f&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">expand</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span> <span class="nb">format</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;.29f&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">expand</span><span class="p">(</span><span class="mf">7.6</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="mi">8</span><span class="p">)),</span> <span class="nb">format</span><span class="p">(</span><span class="mf">7.6</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;.6f&#39;</span><span class="p">))</span>
-
-    <span class="k">def</span> <span class="nf">test_expand_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">expand</span><span class="p">,</span> <span class="s2">&quot;5&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">test_prime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="mi">7427466391</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span>
-
-    <span class="k">def</span> <span class="nf">test_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sliding_window</span><span class="p">(</span><span class="mf">3.1415926589</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;592&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sliding_window</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="nb">format</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;.20f&#39;</span><span class="p">)[</span><span class="mi">7</span><span class="p">:</span><span class="mi">7</span><span class="o">+</span><span class="mi">8</span><span class="p">])</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
-</code></pre></div>
-
-<div class="highlight"><pre><span></span><code><span class="err">!</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">unittest</span> <span class="n">test_functions</span><span class="o">.</span><span class="n">py</span>
-</code></pre></div>
-
-<p>The test returns OK, which means three functions work well.</p>
-<h2>2.5 Main function: find first n-digit prime in the decimal expansion of a number<a name="section5"></a></h2>
-<ol>
-<li>
-<p>For each expression, we first expand it to specified decimals, if it is not specified, we use default 1000.</p>
-</li>
-<li>
-<p>We create sliding windows for the certain number of digit in the expanded expression. It should be a loop because we check from the beginning of the expanded expression and add 1 to the start position each time (shift the window to the right for 1 position each time).</p>
-</li>
-<li>
-<p>Check if the number has length of the prime length we want, because if the number has 0 at the beginning, the length is shortened by 1, thus we set this as the one of the checking condition. And another checking condition is if the nubmer in sliding window is prime or not, and we only need the first prime.</p>
-</li>
-</ol>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">prime_in_num</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">prime_dig</span><span class="p">,</span> <span class="n">expand_decimal</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the first prime of specified length in an expression&quot;&quot;&quot;</span>
-
-    <span class="n">expanded</span> <span class="o">=</span> <span class="n">expand</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">expand_decimal</span><span class="p">):</span>
-        <span class="n">num_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliding_window</span><span class="p">(</span><span class="n">expanded</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">prime_dig</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num_int</span><span class="p">))</span> <span class="o">==</span> <span class="n">prime_dig</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="n">num_int</span><span class="p">)):</span>
-            <span class="k">return</span> <span class="n">num_int</span>
-        <span class="k">else</span><span class="p">:</span> 
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">expand_decimal</span> <span class="o">-</span> <span class="n">prime_dig</span><span class="p">:</span>
-            <span class="k">return</span><span class="p">(</span><span class="s2">&quot;There is no prime with specified length within the decimal expansion of the expression&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<h2>2.6 Unit test of main function<a name="section6"></a></h2>
-<p>What we know: The first 5 digits in the decimal expansion of π are 14159. The first 4-digit prime in the decimal expansion of π are 4159. The first 10-digit prime in the expansion e is 7427466391. We can use unit test to check if our main funciton returns the right answer.</p>
-<div class="highlight"><pre><span></span><code><span class="o">%%</span><span class="n">file</span> <span class="n">main_function</span><span class="o">.</span><span class="n">py</span>
-
-<span class="kn">from</span> <span class="nn">functions</span> <span class="kn">import</span> <span class="n">expand</span><span class="p">,</span> <span class="n">check_prime</span><span class="p">,</span> <span class="n">sliding_window</span>
-
-
-<span class="k">def</span> <span class="nf">prime_in_num</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">prime_dig</span><span class="p">,</span> <span class="n">expand_decimal</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the first prime of specified length in an expression&quot;&quot;&quot;</span>
-
-    <span class="n">expanded</span> <span class="o">=</span> <span class="n">expand</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">expand_decimal</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">expand_decimal</span><span class="p">):</span>
-        <span class="n">num_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliding_window</span><span class="p">(</span><span class="n">expanded</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">prime_dig</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num_int</span><span class="p">))</span> <span class="o">==</span> <span class="n">prime_dig</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">check_prime</span><span class="p">(</span><span class="n">num_int</span><span class="p">)):</span>
-            <span class="k">return</span> <span class="n">num_int</span>
-        <span class="k">else</span><span class="p">:</span> 
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">expand_decimal</span> <span class="o">-</span> <span class="n">prime_dig</span><span class="p">:</span>
-            <span class="k">return</span><span class="p">(</span><span class="s2">&quot;There is no prime with specified length within the decimal expansion of the expression&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<div class="highlight"><pre><span></span><code><span class="o">%%</span><span class="n">file</span> <span class="n">test_main_function</span><span class="o">.</span><span class="n">py</span>
-
-<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">from</span> <span class="nn">functions</span> <span class="kn">import</span> <span class="n">expand</span><span class="p">,</span> <span class="n">check_prime</span><span class="p">,</span> <span class="n">sliding_window</span>
-<span class="kn">from</span> <span class="nn">main_function</span> <span class="kn">import</span> <span class="n">prime_in_num</span>
-
-<span class="k">class</span> <span class="nc">TestHelpers</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">test_main</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">prime_in_num</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="mi">7427466391</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">prime_in_num</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">14159</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">prime_in_num</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">4159</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
-</code></pre></div>
-
-<div class="highlight"><pre><span></span><code><span class="err">!</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">unittest</span> <span class="n">test_main_function</span><span class="o">.</span><span class="n">py</span>
-</code></pre></div>
-
-<p>The test returns OK, which means the main function works well.</p>
-<h2>2.7 Solve the problem<a name="section7"></a></h2>
-<p>Find 10-digit prime in decimal expansion of 17pi.</p>
-<div class="highlight"><pre><span></span><code><span class="n">prime_in_num</span><span class="p">(</span><span class="mi">17</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</code></pre></div>
-
-<p>The result returns 8649375157.</p>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+<li><a href="#section2">2.2 Check …</a></li></ul>
+                <a class="readmore" href="/blog-on-homework-2.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
