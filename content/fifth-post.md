@@ -151,9 +151,9 @@ pass
 
 ```
 
-We see the loss is decreasing and accuracy is increasing as epoch increases. The loss and accuracy of test set is orange line, slightly worse than the blue line but there is no huge discrepancy.
+The loss is decreasing and accuracy is increasing as epoch increases. The loss and accuracy of test set is orange line, slightly worse than the blue line but there is no huge discrepancy.
 
-We can test one image from the dragonfly category, the prediction score is shown below.
+We can test one image from the dragonfly category, the prediction score of 3 classes can be obtained by using below code.
 
 ```python
 image_size = (256,256)
@@ -167,7 +167,7 @@ predictions = model.predict(img_array)
 
 ```
 
-From the below plots, we see the output pixels of the images about the 3 classes. Red pixels increase the model output to be one class while blue pixels decrease the output.
+From below code, we will see the output pixels of the images about the 3 classes. Red pixels increase the model output to be one class while blue pixels decrease the output.
 
 
 ```python
