@@ -8,5 +8,8 @@ In `hw3.ipynb` file, there are informative interactive visualizations about mala
 
 In `hw4.py` file, there is a dashboard with 4 sections which leverage [Science and Engineering PhDs awarded in the US](https://ncses.nsf.gov/pubs/nsf19301/data). I use streamlit as the tool to create this dashboard visualization, because it is new and easy to implement.
 
+In `hw5.ipynb` file, there is an example of deep learning model to classify beetles, cockroaches and dragonflies using these [images](https://www.dropbox.com/s/fn73sj2e6c9rhf6/insects.zip?dl=0).
+
+
 
 For more details, see [Gaojia webpage](https://gaojiaxu.github.io).

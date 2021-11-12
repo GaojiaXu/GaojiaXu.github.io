@@ -3,9 +3,10 @@
 <head>
         <meta charset="utf-8" />
         <meta name="generator" content="Pelican" />
-        <title>BIOSTAT-823-2021Fall Homework Blog</title>
+        <title>Blog on Homework 5</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
         <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="BIOSTAT-823-2021Fall Homework Blog Atom Feed" />
+        <meta name="description" content="In this homework, we suppose to train a deep learning model to classify beetles, cockroaches and dragonflies using these images and explain how..." />
 </head>
 
 <body id="index" class="home">
@@ -13,13 +14,18 @@
                 <h1><a href="/">BIOSTAT-823-2021Fall Homework Blog</a></h1>
                 <nav><ul>
                     <li><a href="/pages/about.html">About</a></li>
-                    <li><a href="/category/misc.html">misc</a></li>
+                    <li class="active"><a href="/category/misc.html">misc</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/blog-on-homework-5.html" rel="bookmark"
+           title="Permalink to Blog on Homework 5">Blog on Homework 5</a></h1>
+    </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/blog-on-homework-5.html">Blog on Homework 5</a></h1>
+    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2021-11-12T00:00:00-05:00">
                 Published: Fri 12 November 2021
@@ -30,7 +36,7 @@
         </address>
 <p>In <a href="/category/misc.html">misc</a>.</p>
 
-</footer><!-- /.post-info --><p>In this homework, we suppose to train a deep learning model to classify beetles, cockroaches and dragonflies using these <a href="https://www.dropbox.com/s/fn73sj2e6c9rhf6/insects.zip?dl=0">images</a> and <em>explain</em> how the neural network classified the images using <a href="https://github.com/slundberg/shap">SHapley Additive exPlanations</a>.</p>
+</footer><!-- /.post-info -->      <p>In this homework, we suppose to train a deep learning model to classify beetles, cockroaches and dragonflies using these <a href="https://www.dropbox.com/s/fn73sj2e6c9rhf6/insects.zip?dl=0">images</a> and <em>explain</em> how the neural network classified the images using <a href="https://github.com/slundberg/shap">SHapley Additive exPlanations</a>.</p>
 <p>Blog outline:</p>
 <ul>
 <li><a href="#section1">4.1 Load Data</a></li>
@@ -188,118 +194,11 @@
 <span class="n">shap</span><span class="o">.</span><span class="n">image_plot</span><span class="p">([</span><span class="n">sv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sv</span><span class="p">))],</span> <span class="n">X_test</span><span class="p">[</span><span class="mi">175</span><span class="p">:</span><span class="mi">180</span><span class="p">])</span>
 </code></pre></div>
 
-<p>Take the fourth image as an example, we have already checked from the prediction that this is a dragonfly, and from a direct look it is a dragonfly as well. Based on the plots in the fourth line, we see the third one has most redness compared to others, where there are activations indicating how the CNN distinguishes between these outcomes.</p>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+<p>Take the fourth image as an example, we have already checked from the prediction that this is a dragonfly, and from a direct look it is a dragonfly as well. Based on the plots in the fourth line, we see the third one has most redness compared to others, where there are activations indicating how the CNN distinguishes between these outcomes.</p>
+    </div><!-- /.entry-content -->
 
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/blog-on-homework-4.html" rel="bookmark"
-                           title="Permalink to Blog on Homework 4">Blog on Homework 4</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2021-10-23T00:00:00-04:00">
-                Published: Sat 23 October 2021
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/gaojia-xu.html">Gaojia Xu</a>
-        </address>
-<p>In <a href="/category/misc.html">misc</a>.</p>
-
-</footer><!-- /.post-info -->                <p>In this homework, we suppose to leverage <a href="https://ncses.nsf.gov/pubs/nsf19301/data">Science and Engineering PhDs awarded in the US</a>. Do some analysis in <code>pandas</code>. Make a <a href="https://pyviz.org/dashboarding/">dashboard visualization</a> of a few interesting aspects of the data.</p>
-<p>I use streamlit as the tool to create the dashboard visualization, because it is new and easy to …</p>
-                <a class="readmore" href="/blog-on-homework-4.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/blog-on-homework-3.html" rel="bookmark"
-                           title="Permalink to Blog on Homework 3">Blog on Homework 3</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2021-10-01T00:00:00-04:00">
-                Published: Fri 01 October 2021
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/gaojia-xu.html">Gaojia Xu</a>
-        </address>
-<p>In <a href="/category/misc.html">misc</a>.</p>
-
-</footer><!-- /.post-info -->                <p>Creating effective visualizations using <a href="https://rafalab.github.io/dsbook/data-visualization-principles.html">best practices</a>
-starting with the <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-11-13">data sets</a>.</p>
-<p>I chose the library plotly and ipywidgets because they are easy to use, it is also quite similar to the R shiny application form that I was used to. This library is powerful that we can make animations based …</p>
-                <a class="readmore" href="/blog-on-homework-3.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/blog-on-homework-2.html" rel="bookmark"
-                           title="Permalink to Blog on Homework 2">Blog on Homework 2</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2021-09-17T00:00:00-04:00">
-                Published: Fri 17 September 2021
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/gaojia-xu.html">Gaojia Xu</a>
-        </address>
-<p>In <a href="/category/misc.html">misc</a>.</p>
-
-</footer><!-- /.post-info -->                <p>Number theory and a Google recruitment puzzle</p>
-<p>In this blog, I will find the first 10-digit prime in the decimal expansion of 17π. We separate the question into 3 small functions and use them to create a main function.</p>
-<p>Blog outline:</p>
-<ul>
-<li><a href="#section1">2.1 Generate expansion of expression.</a></li>
-<li><a href="#section2">2.2 Check …</a></li></ul>
-                <a class="readmore" href="/blog-on-homework-2.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/blog-on-homework-1.html" rel="bookmark"
-                           title="Permalink to Blog on Homework 1">Blog on Homework 1</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2021-09-03T00:00:00-04:00">
-                Published: Fri 03 September 2021
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/gaojia-xu.html">Gaojia Xu</a>
-        </address>
-<p>In <a href="/category/misc.html">misc</a>.</p>
-
-</footer><!-- /.post-info -->                <p>In this blog, my solutions of 3 small questions from <a href="https://projecteuler.net/archives">Euler Project</a> will be explained. They are problem 6, 34 and 80.</p>
-<p>Blog outline:</p>
-<ul>
-<li><a href="#section1">1.1 Sum square difference</a></li>
-<li><a href="#section2">1.2 Digit factorials</a></li>
-<li><a href="#section3">1.3 Square root digital expansion</a></li>
-</ul>
-<h2>1.1 Sum square difference<a name="section1"></a></h2>
-<p>This is problem 6 from the …</p>
-                <a class="readmore" href="/blog-on-homework-1.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-                </ol><!-- /#posts-list -->
-                </section><!-- /#content -->
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>links</h2>
